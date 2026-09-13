@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Data Warehouse & Analytics Engine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --bg-card: rgba(30, 41, 59, 0.7);
+            --border-card: rgba(255, 255, 255, 0.1);
+            --primary: #38bdf8;
+            --primary-glow: rgba(56, 189, 248, 0.3);
+            --accent: #818cf8;
+            --success: #34d399;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(129, 140, 248, 0.12) 0px, transparent 50%);
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.35rem 0.85rem;
+            border-radius: 9999px;
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: 2.75rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        p.subtitle {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-card);
+            border-radius: 1rem;
+            padding: 1.75rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(56, 189, 248, 0.4);
+            box-shadow: 0 10px 30px -10px var(--primary-glow);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .architecture {
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .architecture h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        pre {
+            font-family: 'Fira Code', monospace;
+            background: #020617;
+            padding: 1.25rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            color: #38bdf8;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .cta-group {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: #020617;
+            box-shadow: 0 4px 14px var(--primary-glow);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.95;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-main);
+            border: 1px solid var(--border-card);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-card);
+            padding-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <span class="badge">v2.0 Production Architecture</span>
+            <h1>Real-Time Event-Driven Data Warehouse</h1>
+            <p class="subtitle">An enterprise-grade Kimball Star-Schema Analytics Engine built with DuckDB, Supabase PostgreSQL, FastAPI, Machine Learning, and dbt.</p>
+        </header>
+
+        <div class="grid">
+            <div class="card">
+                <div class="card-icon">⚡</div>
+                <h3>Real-Time Event Ingestion</h3>
+                <p>Automated directory watcher and FastAPI REST endpoints (/api/v1/ingest/*) processing micro-batch order streams into dimensional models.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🏛️</div>
+                <h3>Kimball Star-Schema ELT</h3>
+                <p>SCD Type 2 versioning (dim_customer), point-in-time surrogate key resolution, and automated corrupt row Data Quality filter gates.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🤖</div>
+                <h3>Machine Learning Engine</h3>
+                <p>Customer Churn Risk probability scoring, 3-month AI sales revenue forecasting (Holt-Winters), and Z-score order anomaly detection.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">☁️</div>
+                <h3>Supabase Cloud Sync</h3>
+                <p>High-speed background replication daemon synchronizing local DuckDB OLAP tables live to Supabase PostgreSQL Cloud.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🔔</div>
+                <h3>Webhook Alerts</h3>
+                <p>Dispatches real-time Slack and Discord webhook alerts for Data Quality rule violations and high-value VIP transactions.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🧪</div>
+                <h3>dbt Test Suite & Lineage</h3>
+                <p>Automated primary key, foreign key, and non-null test assertions with interactive visual DAG documentation.</p>
+            </div>
+        </div>
+
+        <div class="architecture">
+            <h2>🏛️ End-to-End System Architecture</h2>
+            <pre>
+┌─────────────────────────────────────────────────────────────────────────┐
+│                     REAL-TIME INGESTION LAYER                           │
+│   File Watcher (data/incoming/)  │  REST API  │  Stream Generator      │
+└────────────────────────────────────┬────────────────────────────────────┘
+                                     │
+                                     ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│                  REAL-TIME EVENT-DRIVEN ELT ENGINE                      │
+│   - Data Quality Filter Gates (Corrupt Value Rejection)                 │
+│   - Kimball Star Schema SCD Type 2 (dim_customer versioning)            │
+│   - Point-in-Time Fact Loading (fact_sales)                             │
+└───────────────┬────────────────────┬────────────────────┬───────────────┘
+                │                    │                    │
+                ▼                    ▼                    ▼
+┌───────────────────────┐ ┌──────────────────────┐ ┌──────────────────────┐
+│ ML PREDICTIVE ANALYTICS│ │ WEBHOOK NOTIFICATION │ │ CLOUD REPLICATION    │
+│ - Churn Risk Score    │ │ - Slack / Discord    │ │ - Local DuckDB ->    │
+│ - Revenue Forecast    │ │ - VIP Order Alerts   │ │   Supabase Cloud     │
+└───────────────────────┘ └──────────────────────┘ └──────────────────────┘
+            </pre>
+        </div>
+
+        <div class="cta-group">
+            <a href="https://github.com/aureliastarborn-a11y/Datawarehouse" class="btn btn-primary" target="_blank">
+                ⭐ View Repository on GitHub
+            </a>
+            <a href="https://yvsjkjncpmfqpcxmuipq.supabase.co" class="btn btn-secondary" target="_blank">
+                ☁️ Supabase Cloud Project
+            </a>
+        </div>
+
+        <footer>
+            <p>Built with DuckDB • Supabase PostgreSQL • FastAPI • dbt • Streamlit</p>
+        </footer>
+    </div>
+</body>
+</html>
