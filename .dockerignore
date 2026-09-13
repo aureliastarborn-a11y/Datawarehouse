@@ -1,0 +1,26 @@
+# Git and IDE
+.git
+.gitignore
+.idea
+.vscode
+
+# Python Virtual Environments & Cache
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local Database & Lock files
+*.duckdb.tmp
+*.duckdb.wal
+
+# Gemini & Scratch Logs
+.gemini/
+scratch/
+
+# Tests & Coverage
+.pytest_cache/
+.coverage
+htmlcov/

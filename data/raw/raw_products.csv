@@ -1,0 +1,49 @@
+raw_product_id,product_name,category,subcategory,unit_price,cost_price,updated_at
+PROD-0001,  Laptops Model A  ,Electronics,Laptops,774.52,315.62,2024-01-01 00:00:00
+PROD-0002,  Laptops Model B  ,Electronics,Laptops,344.53,160.88,2024-01-01 00:00:00
+PROD-0003,  Laptops Model C  ,Electronics,Laptops,889.04,536.1,2024-01-01 00:00:00
+PROD-0004,  Smartphones Model A  ,Electronics,Smartphones,1072.77,457.09,2024-01-01 00:00:00
+PROD-0005,  Smartphones Model B  ,Electronics,Smartphones,517.87,211.78,2024-01-01 00:00:00
+PROD-0006,  Smartphones Model C  ,Electronics,Smartphones,277.99,153.34,2024-01-01 00:00:00
+PROD-0007,  Headphones Model A  ,Electronics,Headphones,51.31,23.58,2024-01-01 00:00:00
+PROD-0008,  Headphones Model B  ,Electronics,Headphones,786.86,443.38,2024-01-01 00:00:00
+PROD-0009,  Headphones Model C  ,Electronics,Headphones,280.12,161.57,2024-01-01 00:00:00
+PROD-0010,  Monitors Model A  ,Electronics,Monitors,975.13,391.95,2024-01-01 00:00:00
+PROD-0011,  Monitors Model B  ,Electronics,Monitors,970.87,591.69,2024-01-01 00:00:00
+PROD-0012,  Monitors Model C  ,Electronics,Monitors,421.5,188.26,2024-01-01 00:00:00
+PROD-0013,  Keyboards Model A  ,Electronics,Keyboards,1149.51,575.88,2024-01-01 00:00:00
+PROD-0014,  Keyboards Model B  ,Electronics,Keyboards,129.44,55.53,2024-01-01 00:00:00
+PROD-0015,  Keyboards Model C  ,Electronics,Keyboards,1020.04,592.76,2024-01-01 00:00:00
+PROD-0016,  Men's Jackets Model A  ,Apparel,Men's Jackets,972.41,601.84,2024-01-01 00:00:00
+PROD-0017,  Men's Jackets Model B  ,Apparel,Men's Jackets,652.75,451.66,2024-01-01 00:00:00
+PROD-0018,  Men's Jackets Model C  ,Apparel,Men's Jackets,466.67,263.95,2024-01-01 00:00:00
+PROD-0019,  Women's Dresses Model A  ,Apparel,Women's Dresses,998.7,584.79,2024-01-01 00:00:00
+PROD-0020,  Women's Dresses Model B  ,Apparel,Women's Dresses,1036.81,594.31,2024-01-01 00:00:00
+PROD-0021,  Women's Dresses Model C  ,Apparel,Women's Dresses,851.39,352.26,2024-01-01 00:00:00
+PROD-0022,  Footwear Model A  ,Apparel,Footwear,288.92,140.65,2024-01-01 00:00:00
+PROD-0023,  Footwear Model B  ,Apparel,Footwear,114.15,53.63,2024-01-01 00:00:00
+PROD-0024,  Footwear Model C  ,Apparel,Footwear,139.18,67.28,2024-01-01 00:00:00
+PROD-0025,  Sportswear Model A  ,Apparel,Sportswear,770.11,392.33,2024-01-01 00:00:00
+PROD-0026,  Sportswear Model B  ,Apparel,Sportswear,456.81,211.44,2024-01-01 00:00:00
+PROD-0027,  Sportswear Model C  ,Apparel,Sportswear,335.03,228.15,2024-01-01 00:00:00
+PROD-0028,  Coffee Makers Model A  ,Home & Kitchen,Coffee Makers,784.68,457.26,2024-01-01 00:00:00
+PROD-0029,  Coffee Makers Model B  ,Home & Kitchen,Coffee Makers,221.94,137.32,2024-01-01 00:00:00
+PROD-0030,  Coffee Makers Model C  ,Home & Kitchen,Coffee Makers,212.81,109.35,2024-01-01 00:00:00
+PROD-0031,  Blenders Model A  ,Home & Kitchen,Blenders,1187.64,703.08,2024-01-01 00:00:00
+PROD-0032,  Blenders Model B  ,Home & Kitchen,Blenders,677.2,409.97,2024-01-01 00:00:00
+PROD-0033,  Blenders Model C  ,Home & Kitchen,Blenders,1014.57,642.02,2024-01-01 00:00:00
+PROD-0034,  Air Purifiers Model A  ,Home & Kitchen,Air Purifiers,290.28,118.91,2024-01-01 00:00:00
+PROD-0035,  Air Purifiers Model B  ,Home & Kitchen,Air Purifiers,392.23,188.4,2024-01-01 00:00:00
+PROD-0036,  Air Purifiers Model C  ,Home & Kitchen,Air Purifiers,268.96,183.67,2024-01-01 00:00:00
+PROD-0037,  Cookware Model A  ,Home & Kitchen,Cookware,1054.11,521.16,2024-01-01 00:00:00
+PROD-0038,  Cookware Model B  ,Home & Kitchen,Cookware,793.42,411.54,2024-01-01 00:00:00
+PROD-0039,  Cookware Model C  ,Home & Kitchen,Cookware,1099.17,590.97,2024-01-01 00:00:00
+PROD-0040,  Fiction Bestellers Model A  ,Books & Media,Fiction Bestellers,332.56,157.63,2024-01-01 00:00:00
+PROD-0041,  Fiction Bestellers Model B  ,Books & Media,Fiction Bestellers,682.41,326.75,2024-01-01 00:00:00
+PROD-0042,  Fiction Bestellers Model C  ,Books & Media,Fiction Bestellers,709.81,475.11,2024-01-01 00:00:00
+PROD-0043,  Tech Manuals Model A  ,Books & Media,Tech Manuals,491.29,228.84,2024-01-01 00:00:00
+PROD-0044,  Tech Manuals Model B  ,Books & Media,Tech Manuals,1197.09,661.82,2024-01-01 00:00:00
+PROD-0045,  Tech Manuals Model C  ,Books & Media,Tech Manuals,127.27,52.71,2024-01-01 00:00:00
+PROD-0046,  Self-Help Model A  ,Books & Media,Self-Help,149.39,87.88,2024-01-01 00:00:00
+PROD-0047,  Self-Help Model B  ,Books & Media,Self-Help,954.65,502.76,2024-01-01 00:00:00
+PROD-0048,  Self-Help Model C  ,Books & Media,Self-Help,94.96,48.86,2024-01-01 00:00:00

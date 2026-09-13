@@ -1,0 +1,34 @@
+raw_customer_id,first_name,last_name,email,customer_tier,city,state,country,updated_at
+CUST-0003,Michael,Johnson,michael.johnson3@newdomain.com,Platinum,London,ENG,UK,2024-03-31 09:00:00
+CUST-0006,Alice,Rodriguez,alice.rodriguez6@newdomain.com,Gold,New York,NY,USA,2024-08-03 09:00:00
+CUST-0009,Jane,Rodriguez,jane.rodriguez9@newdomain.com,Gold,Toronto,ON,Canada,2024-07-30 09:00:00
+CUST-0012,Laura,Garcia,laura.garcia12@newdomain.com,Platinum,New York,NY,USA,2024-05-27 09:00:00
+CUST-0015,John,Garcia,john.garcia15@newdomain.com,Gold,Los Angeles,CA,USA,2024-08-02 09:00:00
+CUST-0018,Sarah,Garcia,sarah.garcia18@newdomain.com,Platinum,New York,NY,USA,2024-10-03 09:00:00
+CUST-0021,Alice,Miller,alice.miller21@newdomain.com,Platinum,Houston,TX,USA,2024-04-19 09:00:00
+CUST-0024,Sarah,Smith,sarah.smith24@newdomain.com,Platinum,Chicago,IL,USA,2024-07-08 09:00:00
+CUST-0027,John,Smith,john.smith27@newdomain.com,Platinum,Los Angeles,CA,USA,2024-08-13 09:00:00
+CUST-0030,Daniel,Brown,daniel.brown30@newdomain.com,Gold,London,ENG,UK,2024-07-16 09:00:00
+CUST-0033,Laura,Jones,laura.jones33@newdomain.com,Platinum,New York,NY,USA,2024-04-18 09:00:00
+CUST-0036,Jane,Brown,jane.brown36@newdomain.com,Platinum,London,ENG,UK,2024-08-17 09:00:00
+CUST-0039,Alice,Jones,alice.jones39@newdomain.com,Gold,Chicago,IL,USA,2024-05-09 09:00:00
+CUST-0042,John,Johnson,john.johnson42@newdomain.com,Platinum,New York,NY,USA,2024-04-11 09:00:00
+CUST-0045,Jane,Johnson,jane.johnson45@newdomain.com,Gold,Toronto,ON,Canada,2024-07-03 09:00:00
+CUST-0048,Laura,Johnson,laura.johnson48@newdomain.com,Platinum,Los Angeles,CA,USA,2024-10-08 09:00:00
+CUST-0051,Sarah,Brown,sarah.brown51@newdomain.com,Gold,Houston,TX,USA,2024-04-27 09:00:00
+CUST-0054,Laura,Brown,laura.brown54@newdomain.com,Platinum,Berlin,BER,Germany,2024-04-17 09:00:00
+CUST-0057,Emily,Williams,emily.williams57@newdomain.com,Platinum,Houston,TX,USA,2024-08-30 09:00:00
+CUST-0060,John,Rodriguez,john.rodriguez60@newdomain.com,Gold,London,ENG,UK,2024-04-17 09:00:00
+CUST-0063,James,Jones,james.jones63@newdomain.com,Gold,Houston,TX,USA,2024-09-17 09:00:00
+CUST-0066,Daniel,Martinez,daniel.martinez66@newdomain.com,Platinum,London,ENG,UK,2024-07-22 09:00:00
+CUST-0069,Robert,Jones,robert.jones69@newdomain.com,Gold,Los Angeles,CA,USA,2024-04-11 09:00:00
+CUST-0072,Robert,Williams,robert.williams72@newdomain.com,Gold,New York,NY,USA,2024-10-14 09:00:00
+CUST-0075,Laura,Rodriguez,laura.rodriguez75@newdomain.com,Platinum,Toronto,ON,Canada,2024-07-22 09:00:00
+CUST-0078,Laura,Jones,laura.jones78@newdomain.com,Platinum,Houston,TX,USA,2024-06-09 09:00:00
+CUST-0081,James,Williams,james.williams81@newdomain.com,Gold,Chicago,IL,USA,2024-07-13 09:00:00
+CUST-0084,Daniel,Miller,daniel.miller84@newdomain.com,Gold,Berlin,BER,Germany,2024-06-15 09:00:00
+CUST-0087,Laura,Miller,laura.miller87@newdomain.com,Gold,Toronto,ON,Canada,2024-05-02 09:00:00
+CUST-0090,Emily,Miller,emily.miller90@newdomain.com,Gold,Berlin,BER,Germany,2024-06-25 09:00:00
+CUST-0093,Michael,Brown,michael.brown93@newdomain.com,Gold,New York,NY,USA,2024-09-13 09:00:00
+CUST-0096,Robert,Davis,robert.davis96@newdomain.com,Platinum,Toronto,ON,Canada,2024-05-12 09:00:00
+CUST-0099,Sarah,Miller,sarah.miller99@newdomain.com,Gold,Berlin,BER,Germany,2024-09-23 09:00:00

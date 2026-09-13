@@ -1,0 +1,37 @@
+# Environment & Secrets
+.env
+.env.local
+*.env
+
+# Database & Storage
+*.duckdb
+*.duckdb.wal
+warehouse.duckdb
+warehouse_olap.duckdb
+data/archive/*.csv
+data/archive/*.json
+data/incoming/*.csv
+data/incoming/*.json
+
+# Python & Caches
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+
+# dbt Artifacts & Compiled Code
+target/
+dbt_packages/
+logs/
+*.log
+
+# Streamlit
+.streamlit/secrets.toml
+
+# OS & IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

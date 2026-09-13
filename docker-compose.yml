@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  realtime-dw-engine:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: realtime_dw_engine
+    restart: always
+    command: python run.py --realtime
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_MODE=LOCAL
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - API_KEY=dw-secret-key-2024
+      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL:-}
+      - DISCORD_WEBHOOK_URL=${DISCORD_WEBHOOK_URL:-}
+    volumes:
+      - dw_data_volume:/app/data
+      - ./target:/app/target
+      - ./data/incoming:/app/data/incoming
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/api/v1/realtime/stream-status -H 'X-API-Key: dw-secret-key-2024' || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  realtime-dw-dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: realtime_dw_dashboard
+    restart: always
+    command: python scripts/run_dashboard.py
+    ports:
+      - "8501:8501"
+    environment:
+      - DATABASE_MODE=LOCAL
+    volumes:
+      - dw_data_volume:/app/data
+    depends_on:
+      - realtime-dw-engine
+
+volumes:
+  dw_data_volume:
+    name: dw_data_volume

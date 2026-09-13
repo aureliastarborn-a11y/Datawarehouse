@@ -1,0 +1,36 @@
+# ============================================================================
+# Production Cloud dbt profiles.yml Configuration
+# Supports Snowflake Data Cloud & Google BigQuery Targets
+# ============================================================================
+
+ecommerce_dw_cloud:
+  target: snowflake_prod
+  outputs:
+    # ------------------------------------------------------------------------
+    # SNOWFLAKE CLOUD TARGET
+    # ------------------------------------------------------------------------
+    snowflake_prod:
+      type: snowflake
+      account: "xy12345.us-east-1" # Replace with your Snowflake Account Identifier
+      user: "DBT_PIPELINE_USER"
+      password: "{{ env_var('DBT_ENV_SECRET_SNOWFLAKE_PASSWORD') }}"
+      role: "SYSADMIN"
+      database: "ECOM_DATA_WAREHOUSE"
+      warehouse: "ECOM_DW_WH"
+      schema: "DW"
+      threads: 8
+      client_session_keep_alive: False
+
+    # ------------------------------------------------------------------------
+    # GOOGLE BIGQUERY CLOUD TARGET
+    # ------------------------------------------------------------------------
+    bigquery_prod:
+      type: bigquery
+      method: service-account
+      project: "my-gcp-project-id"
+      dataset: "dw"
+      keyfile: "/var/secrets/gcp-service-account.json" # Or use env_var
+      threads: 8
+      timeout_seconds: 300
+      location: "US"
+      priority: interactive

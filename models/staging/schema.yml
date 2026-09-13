@@ -1,0 +1,55 @@
+version: 2
+
+sources:
+  - name: raw_data
+    schema: main
+    tables:
+      - name: stg_customers
+        description: "Raw customer profile staging table"
+      - name: stg_products
+        description: "Raw product staging table"
+      - name: stg_orders
+        description: "Raw transactional order line items staging table"
+
+models:
+  - name: stg_customers
+    description: "Cleaned and deduplicated staging view for customer profiles"
+    columns:
+      - name: customer_id
+        description: "Natural customer business identifier"
+        tests:
+          - not_null
+      - name: email
+        description: "Standardized lowercased email address"
+        tests:
+          - not_null
+      - name: customer_tier
+        description: "Membership tier classification"
+        tests:
+          - accepted_values:
+              values: ['Standard', 'Bronze', 'Silver', 'Gold', 'Platinum']
+
+  - name: stg_products
+    description: "Cleaned and deduplicated staging view for product catalog"
+    columns:
+      - name: product_id
+        description: "Natural product identifier"
+        tests:
+          - not_null
+          - unique
+      - name: unit_price
+        description: "Base selling price per unit"
+        tests:
+          - not_null
+
+  - name: stg_orders
+    description: "Cleaned staging view for transactional line items"
+    columns:
+      - name: order_id
+        description: "Order transaction header identifier"
+        tests:
+          - not_null
+      - name: quantity
+        description: "Units purchased in order line"
+        tests:
+          - not_null

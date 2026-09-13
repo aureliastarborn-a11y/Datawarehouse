@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: fct_mom_revenue
+    description: "Month-over-month revenue growth, discounts, net revenue, and margin analysis"
+    columns:
+      - name: year
+        description: "Calendar year"
+        tests:
+          - not_null
+      - name: month
+        description: "Calendar month number (1-12)"
+        tests:
+          - not_null
+
+  - name: fct_cohort_retention
+    description: "Customer acquisition cohort retention rate and lifetime value (LTV)"
+    columns:
+      - name: cohort_month
+        description: "Customer initial acquisition month YYYY-MM"
+        tests:
+          - not_null
+
+  - name: fct_rfm_segmentation
+    description: "RFM percentile segmentation metrics per customer behavioral segment"
+    columns:
+      - name: rfm_segment
+        description: "Assigned RFM segment classification"
+        tests:
+          - not_null

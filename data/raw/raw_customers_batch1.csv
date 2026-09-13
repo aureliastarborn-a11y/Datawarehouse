@@ -1,0 +1,101 @@
+raw_customer_id,first_name,last_name,email,customer_tier,city,state,country,updated_at
+CUST-0001,David ,Rodriguez,David.Rodriguez1@Example.Com,Bronze,Chicago,IL,USA,2024-01-01 09:00:00
+CUST-0002,Jane ,Rodriguez,Jane.Rodriguez2@Example.Com,Gold,Berlin,BER,Germany,2024-01-01 09:00:00
+CUST-0003,Michael ,Johnson,Michael.Johnson3@Example.Com,Platinum,Chicago,IL,USA,2024-01-01 09:00:00
+CUST-0004,James ,Jones,James.Jones4@Example.Com,Silver,Toronto,ON,Canada,2024-01-01 09:00:00
+CUST-0005,Jane ,Jones,Jane.Jones5@Example.Com,Silver,Berlin,BER,Germany,2024-01-01 09:00:00
+CUST-0006,Alice ,Rodriguez,Alice.Rodriguez6@Example.Com,Bronze,Berlin,BER,Germany,2024-01-01 09:00:00
+CUST-0007,Jane ,Garcia,Jane.Garcia7@Example.Com,Gold,Berlin,BER,Germany,2024-01-01 09:00:00
+CUST-0008,Robert ,Martinez,Robert.Martinez8@Example.Com,Bronze,New York,NY,USA,2024-01-01 09:00:00
+CUST-0009,Jane ,Rodriguez,Jane.Rodriguez9@Example.Com,Silver,Berlin,BER,Germany,2024-01-01 09:00:00
+CUST-0010,Alice ,Jones,Alice.Jones10@Example.Com,Platinum,Toronto,ON,Canada,2024-01-01 09:00:00
+CUST-0011,Jessica ,Brown,Jessica.Brown11@Example.Com,Gold,London,ENG,UK,2024-01-01 09:00:00
+CUST-0012,Laura ,Garcia,Laura.Garcia12@Example.Com,Platinum,Houston,TX,USA,2024-01-01 09:00:00
+CUST-0013,Michael ,Smith,Michael.Smith13@Example.Com,Silver,Toronto,ON,Canada,2024-01-01 09:00:00
+CUST-0014,John ,Johnson,John.Johnson14@Example.Com,Bronze,London,ENG,UK,2024-01-01 09:00:00
+CUST-0015,John ,Garcia,John.Garcia15@Example.Com,Silver,New York,NY,USA,2024-01-01 09:00:00
+CUST-0016,Jessica ,Williams,Jessica.Williams16@Example.Com,Platinum,London,ENG,UK,2024-01-01 09:00:00
+CUST-0017,David ,Miller,David.Miller17@Example.Com,,Los Angeles,CA,USA,2024-01-01 09:00:00
+CUST-0018,Sarah ,Garcia,Sarah.Garcia18@Example.Com,Platinum,Houston,TX,USA,2024-01-01 09:00:00
+CUST-0019,Laura ,Johnson,Laura.Johnson19@Example.Com,Platinum,New York,NY,USA,2024-01-01 09:00:00
+CUST-0020,Jane ,Brown,Jane.Brown20@Example.Com,Silver,Los Angeles,CA,USA,2024-01-01 09:00:00
+CUST-0021,Alice ,Miller,Alice.Miller21@Example.Com,Gold,Los Angeles,CA,USA,2024-01-01 09:00:00
+CUST-0022,Jessica ,Johnson,Jessica.Johnson22@Example.Com,Bronze,New York,NY,USA,2024-01-01 09:00:00
+CUST-0023,Robert ,Williams,Robert.Williams23@Example.Com,Platinum,Houston,TX,USA,2024-01-01 09:00:00
+CUST-0024,Sarah ,Smith,Sarah.Smith24@Example.Com,,Los Angeles,CA,USA,2024-01-01 09:00:00
+CUST-0025,David ,Jones,David.Jones25@Example.Com,Platinum,Houston,TX,USA,2024-01-01 09:00:00
+CUST-0026,Emily ,Brown,Emily.Brown26@Example.Com,Bronze,New York,NY,USA,2024-01-01 09:00:00
+CUST-0027,John ,Smith,John.Smith27@Example.Com,Platinum,Toronto,ON,Canada,2024-01-01 09:00:00
+CUST-0028,John ,Rodriguez,John.Rodriguez28@Example.Com,,New York,NY,USA,2024-01-01 09:00:00
+CUST-0029,Jane ,Brown,Jane.Brown29@Example.Com,Bronze,Houston,TX,USA,2024-01-01 09:00:00
+CUST-0030,Daniel ,Brown,Daniel.Brown30@Example.Com,Bronze,Toronto,ON,Canada,2024-01-01 09:00:00
+CUST-0031,Daniel ,Martinez,Daniel.Martinez31@Example.Com,Gold,Toronto,ON,Canada,2024-01-01 09:00:00
+CUST-0032,Robert ,Garcia,Robert.Garcia32@Example.Com,Gold,Los Angeles,CA,USA,2024-01-01 09:00:00
+CUST-0033,Laura ,Jones,Laura.Jones33@Example.Com,Gold,Houston,TX,USA,2024-01-01 09:00:00
+CUST-0034,David ,Martinez,David.Martinez34@Example.Com,,Toronto,ON,Canada,2024-01-01 09:00:00
+CUST-0035,Robert ,Rodriguez,Robert.Rodriguez35@Example.Com,Silver,Chicago,IL,USA,2024-01-01 09:00:00
+CUST-0036,Jane ,Brown,Jane.Brown36@Example.Com,Gold,Chicago,IL,USA,2024-01-01 09:00:00
+CUST-0037,Emily ,Martinez,Emily.Martinez37@Example.Com,Bronze,Berlin,BER,Germany,2024-01-01 09:00:00
+CUST-0038,Jessica ,Jones,Jessica.Jones38@Example.Com,Bronze,London,ENG,UK,2024-01-01 09:00:00
+CUST-0039,Alice ,Jones,Alice.Jones39@Example.Com,Bronze,New York,NY,USA,2024-01-01 09:00:00
+CUST-0040,Emily ,Martinez,Emily.Martinez40@Example.Com,Gold,Los Angeles,CA,USA,2024-01-01 09:00:00
+CUST-0041,Laura ,Jones,Laura.Jones41@Example.Com,Platinum,Toronto,ON,Canada,2024-01-01 09:00:00
+CUST-0042,John ,Johnson,John.Johnson42@Example.Com,Platinum,London,ENG,UK,2024-01-01 09:00:00
+CUST-0043,Michael ,Williams,Michael.Williams43@Example.Com,Gold,London,ENG,UK,2024-01-01 09:00:00
+CUST-0044,David ,Rodriguez,David.Rodriguez44@Example.Com,Platinum,London,ENG,UK,2024-01-01 09:00:00
+CUST-0045,Jane ,Johnson,Jane.Johnson45@Example.Com,Silver,London,ENG,UK,2024-01-01 09:00:00
+CUST-0046,Jessica ,Williams,Jessica.Williams46@Example.Com,,Houston,TX,USA,2024-01-01 09:00:00
+CUST-0047,Michael ,Smith,Michael.Smith47@Example.Com,Silver,Chicago,IL,USA,2024-01-01 09:00:00
+CUST-0048,Laura ,Johnson,Laura.Johnson48@Example.Com,Platinum,Chicago,IL,USA,2024-01-01 09:00:00
+CUST-0049,Robert ,Williams,Robert.Williams49@Example.Com,Silver,Berlin,BER,Germany,2024-01-01 09:00:00
+CUST-0050,John ,Williams,John.Williams50@Example.Com,Gold,London,ENG,UK,2024-01-01 09:00:00
+CUST-0051,Sarah ,Brown,Sarah.Brown51@Example.Com,Silver,Chicago,IL,USA,2024-01-01 09:00:00
+CUST-0052,John ,Davis,John.Davis52@Example.Com,Silver,Los Angeles,CA,USA,2024-01-01 09:00:00
+CUST-0053,David ,Garcia,David.Garcia53@Example.Com,Silver,Chicago,IL,USA,2024-01-01 09:00:00
+CUST-0054,Laura ,Brown,Laura.Brown54@Example.Com,Gold,Houston,TX,USA,2024-01-01 09:00:00
+CUST-0055,Emily ,Garcia,Emily.Garcia55@Example.Com,Platinum,London,ENG,UK,2024-01-01 09:00:00
+CUST-0056,Jessica ,Garcia,Jessica.Garcia56@Example.Com,Bronze,New York,NY,USA,2024-01-01 09:00:00
+CUST-0057,Emily ,Williams,Emily.Williams57@Example.Com,,Toronto,ON,Canada,2024-01-01 09:00:00
+CUST-0058,Michael ,Garcia,Michael.Garcia58@Example.Com,Bronze,Houston,TX,USA,2024-01-01 09:00:00
+CUST-0059,Daniel ,Brown,Daniel.Brown59@Example.Com,Bronze,Chicago,IL,USA,2024-01-01 09:00:00
+CUST-0060,John ,Rodriguez,John.Rodriguez60@Example.Com,Silver,Berlin,BER,Germany,2024-01-01 09:00:00
+CUST-0061,Michael ,Martinez,Michael.Martinez61@Example.Com,Bronze,Chicago,IL,USA,2024-01-01 09:00:00
+CUST-0062,Emily ,Rodriguez,Emily.Rodriguez62@Example.Com,Platinum,Chicago,IL,USA,2024-01-01 09:00:00
+CUST-0063,James ,Jones,James.Jones63@Example.Com,Silver,Toronto,ON,Canada,2024-01-01 09:00:00
+CUST-0064,Laura ,Williams,Laura.Williams64@Example.Com,Gold,Toronto,ON,Canada,2024-01-01 09:00:00
+CUST-0065,John ,Jones,John.Jones65@Example.Com,Silver,Chicago,IL,USA,2024-01-01 09:00:00
+CUST-0066,Daniel ,Martinez,Daniel.Martinez66@Example.Com,Gold,London,ENG,UK,2024-01-01 09:00:00
+CUST-0067,Robert ,Rodriguez,Robert.Rodriguez67@Example.Com,Silver,Houston,TX,USA,2024-01-01 09:00:00
+CUST-0068,Emily ,Rodriguez,Emily.Rodriguez68@Example.Com,,London,ENG,UK,2024-01-01 09:00:00
+CUST-0069,Robert ,Jones,Robert.Jones69@Example.Com,Silver,Los Angeles,CA,USA,2024-01-01 09:00:00
+CUST-0070,David ,Martinez,David.Martinez70@Example.Com,Bronze,Berlin,BER,Germany,2024-01-01 09:00:00
+CUST-0071,Laura ,Martinez,Laura.Martinez71@Example.Com,Platinum,Los Angeles,CA,USA,2024-01-01 09:00:00
+CUST-0072,Robert ,Williams,Robert.Williams72@Example.Com,Bronze,London,ENG,UK,2024-01-01 09:00:00
+CUST-0073,Sarah ,Brown,Sarah.Brown73@Example.Com,,Los Angeles,CA,USA,2024-01-01 09:00:00
+CUST-0074,Robert ,Johnson,Robert.Johnson74@Example.Com,Silver,Houston,TX,USA,2024-01-01 09:00:00
+CUST-0075,Laura ,Rodriguez,Laura.Rodriguez75@Example.Com,Gold,Toronto,ON,Canada,2024-01-01 09:00:00
+CUST-0076,James ,Rodriguez,James.Rodriguez76@Example.Com,Platinum,Houston,TX,USA,2024-01-01 09:00:00
+CUST-0077,James ,Davis,James.Davis77@Example.Com,Gold,Houston,TX,USA,2024-01-01 09:00:00
+CUST-0078,Laura ,Jones,Laura.Jones78@Example.Com,Platinum,Berlin,BER,Germany,2024-01-01 09:00:00
+CUST-0079,Jane ,Jones,Jane.Jones79@Example.Com,Gold,Los Angeles,CA,USA,2024-01-01 09:00:00
+CUST-0080,Jessica ,Johnson,Jessica.Johnson80@Example.Com,Silver,Los Angeles,CA,USA,2024-01-01 09:00:00
+CUST-0081,James ,Williams,James.Williams81@Example.Com,,London,ENG,UK,2024-01-01 09:00:00
+CUST-0082,Jessica ,Davis,Jessica.Davis82@Example.Com,Bronze,Houston,TX,USA,2024-01-01 09:00:00
+CUST-0083,Sarah ,Miller,Sarah.Miller83@Example.Com,Bronze,Berlin,BER,Germany,2024-01-01 09:00:00
+CUST-0084,Daniel ,Miller,Daniel.Miller84@Example.Com,Bronze,Houston,TX,USA,2024-01-01 09:00:00
+CUST-0085,Sarah ,Miller,Sarah.Miller85@Example.Com,Silver,Toronto,ON,Canada,2024-01-01 09:00:00
+CUST-0086,Emily ,Miller,Emily.Miller86@Example.Com,Bronze,Houston,TX,USA,2024-01-01 09:00:00
+CUST-0087,Laura ,Miller,Laura.Miller87@Example.Com,Silver,London,ENG,UK,2024-01-01 09:00:00
+CUST-0088,Jessica ,Smith,Jessica.Smith88@Example.Com,,Houston,TX,USA,2024-01-01 09:00:00
+CUST-0089,Sarah ,Williams,Sarah.Williams89@Example.Com,Platinum,Berlin,BER,Germany,2024-01-01 09:00:00
+CUST-0090,Emily ,Miller,Emily.Miller90@Example.Com,Silver,Chicago,IL,USA,2024-01-01 09:00:00
+CUST-0091,Sarah ,Jones,Sarah.Jones91@Example.Com,Platinum,Berlin,BER,Germany,2024-01-01 09:00:00
+CUST-0092,Jane ,Davis,Jane.Davis92@Example.Com,Bronze,New York,NY,USA,2024-01-01 09:00:00
+CUST-0093,Michael ,Brown,Michael.Brown93@Example.Com,Bronze,London,ENG,UK,2024-01-01 09:00:00
+CUST-0094,John ,Brown,John.Brown94@Example.Com,Bronze,Los Angeles,CA,USA,2024-01-01 09:00:00
+CUST-0095,Robert ,Williams,Robert.Williams95@Example.Com,Bronze,Houston,TX,USA,2024-01-01 09:00:00
+CUST-0096,Robert ,Davis,Robert.Davis96@Example.Com,Gold,London,ENG,UK,2024-01-01 09:00:00
+CUST-0097,Daniel ,Johnson,Daniel.Johnson97@Example.Com,Silver,Berlin,BER,Germany,2024-01-01 09:00:00
+CUST-0098,Jane ,Martinez,Jane.Martinez98@Example.Com,Gold,New York,NY,USA,2024-01-01 09:00:00
+CUST-0099,Sarah ,Miller,Sarah.Miller99@Example.Com,,London,ENG,UK,2024-01-01 09:00:00
+CUST-0100,Laura ,Brown,Laura.Brown100@Example.Com,Gold,New York,NY,USA,2024-01-01 09:00:00

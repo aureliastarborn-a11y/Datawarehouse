@@ -1,0 +1,67 @@
+version: 2
+
+models:
+  - name: dim_date
+    description: "Conformed date dimension table"
+    columns:
+      - name: date_key
+        description: "Primary key in format YYYYMMDD"
+        tests:
+          - not_null
+          - unique
+
+  - name: dim_product
+    description: "Conformed product dimension table"
+    columns:
+      - name: product_key
+        description: "Surrogate primary key"
+        tests:
+          - not_null
+          - unique
+      - name: product_id
+        description: "Natural product code"
+        tests:
+          - not_null
+
+  - name: dim_customer
+    description: "Customer dimension table tracking SCD Type 2 changes"
+    columns:
+      - name: customer_key
+        description: "Surrogate primary key for specific customer version"
+        tests:
+          - not_null
+          - unique
+      - name: customer_id
+        description: "Natural customer business key"
+        tests:
+          - not_null
+
+  - name: fact_sales
+    description: "Transactional sales fact table (Grain: Order Line Item)"
+    columns:
+      - name: sales_fact_key
+        description: "Primary key for fact table"
+        tests:
+          - not_null
+          - unique
+      - name: customer_key
+        description: "Foreign key to dim_customer (SCD2 point-in-time)"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customer')
+              field: customer_key
+      - name: product_key
+        description: "Foreign key to dim_product"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_product')
+              field: product_key
+      - name: order_date_key
+        description: "Foreign key to dim_date"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_date')
+              field: date_key
