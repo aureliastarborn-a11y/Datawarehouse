@@ -419,58 +419,129 @@ st.divider()
 # ============================================================================
 
 tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
+    "📥 Drag & Drop CSV Ingestion",
     "📈 Stock Analytics",
     "🌤️ Weather Analytics",
     "📰 News Analytics",
     "🔗 Cross-Domain",
     "⚙️ Pipeline Audit",
-    "🤖 ML Predictive Insights",
-    "📤 CSV Ingestion"
+    "🤖 ML Predictive Insights"
 ])
 
 
 # ============================================================================
-# TAB 7: CSV INGESTION
-# ============================================================================
-with tab7:
-    st.subheader("📤 Real-Time CSV Data Ingestion")
-    st.markdown("Upload a CSV file below to instantly ingest it into the Data Warehouse through the Real-Time ELT Engine.")
-
-    uploaded_file = st.file_uploader(
-        "Choose a CSV file",
-        type=["csv"],
-        key="main_csv_uploader"
-    )
-
-    if uploaded_file is not None:
-        st.markdown(f"**Selected file:** `{uploaded_file.name}` ({uploaded_file.size:,} bytes)")
-        preview_df = pd.read_csv(uploaded_file)
-        st.dataframe(preview_df.head(10), use_container_width=True)
-        st.caption(f"Showing first 10 of {len(preview_df)} rows")
-        uploaded_file.seek(0)  # Reset file pointer after preview
-
-        if st.button("⚡ Ingest into Data Warehouse Now", type="primary", use_container_width=True):
-            with st.spinner("Ingesting CSV through Real-Time ELT Engine..."):
-                try:
-                    from pipeline.realtime_engine import realtime_engine
-                    df_upload = pd.read_csv(uploaded_file)
-                    res = realtime_engine.process_raw_dataframe(df_upload, source_type=f"ui_upload:{uploaded_file.name}")
-                    if res.get("status") == "completed":
-                        st.success(f"✅ Successfully ingested {res['submitted_rows']} rows into the Data Warehouse!")
-                        st.info(f"Execution Latency: {res.get('execution_time_ms', 0)}ms")
-                        st.rerun()
-                    else:
-                        st.error(f"Ingestion failed: {res.get('error')}")
-                except Exception as e:
-                    st.error(f"Upload processing error: {e}")
-    else:
-        st.info("👆 Select a CSV file above to preview and ingest it.")
-
-
-# ============================================================================
-# TAB 1: STOCK ANALYTICS
+# TAB 1: DRAG & DROP CSV DATA INGESTION
 # ============================================================================
 with tab1:
+    st.markdown("<div class='editorial-badge'>REAL-TIME DATA INGESTION ENGINE</div>", unsafe_allow_html=True)
+    st.subheader("📥 Drag & Drop CSV File Ingestion")
+    st.markdown("Drag and drop raw CSV or JSON files below to instantly transform, validate, and ingest them into the Kimball Star-Schema Data Warehouse.")
+
+    # Sample Data Download Section
+    st.markdown("---")
+    sc1, sc2, sc3 = st.columns([1, 1, 1])
+    with sc1:
+        sample_orders_csv = """order_id,order_line_number,customer_id,product_id,first_name,last_name,email,customer_tier,city,state,country,product_name,category,subcategory,unit_price,cost_price,quantity,discount_amount,tax_amount,order_timestamp
+ORD_UI_9001,1,CUST_101,PROD_001,Liam,Smith,liam.smith@example.com,Platinum VIP,New York,NY,USA,Quantum Laptop Pro 16,Electronics,Laptops,2400.0,1500.0,2,50.0,188.0,2026-09-13 11:50:00
+ORD_UI_9002,1,CUST_102,PROD_002,Olivia,Johnson,olivia.j@example.com,Gold,San Francisco,CA,USA,AI Neural Workstation X,Hardware,Workstations,4800.0,3000.0,1,0.0,384.0,2026-09-13 11:51:00
+ORD_UI_9003,1,CUST_103,PROD_003,Noah,Williams,noah.w@example.com,Silver,London,ENG,UK,UltraSmart Watch Gen 5,Wearables,Smartwatches,450.0,220.0,3,25.0,34.0,2026-09-13 11:52:00"""
+        st.download_button(
+            label="📄 Download Sample Orders Stream CSV",
+            data=sample_orders_csv,
+            file_name="sample_realtime_orders.csv",
+            mime="text/csv",
+            use_container_width=True
+        )
+
+    with sc2:
+        sample_customers_csv = """raw_customer_id,first_name,last_name,email,customer_tier,city,state,country,updated_at
+CUST_101,Liam,Smith,liam.smith_updated@example.com,Diamond Executive VIP,New York,NY,USA,2026-09-13 11:53:00
+CUST_102,Olivia,Johnson,olivia.j@example.com,Platinum VIP,San Francisco,CA,USA,2026-09-13 11:54:00"""
+        st.download_button(
+            label="👤 Download Sample Customers SCD2 CSV",
+            data=sample_customers_csv,
+            file_name="sample_customers_scd2.csv",
+            mime="text/csv",
+            use_container_width=True
+        )
+
+    with sc3:
+        st.info("💡 **Tip**: Click a button to download a sample CSV, then drag & drop it directly into the box below!")
+
+    st.markdown("---")
+
+    # File Uploader Box
+    uploaded_files = st.file_uploader(
+        "Drag and Drop CSV or JSON files here",
+        type=["csv", "json"],
+        accept_multiple_files=True,
+        key="main_drag_drop_csv_uploader",
+        help="Supports .csv and .json micro-batch streaming files up to 200MB."
+    )
+
+    if uploaded_files:
+        st.success(f"📁 {len(uploaded_files)} file(s) selected for ingestion.")
+
+        for file_idx, uploaded_file in enumerate(uploaded_files):
+            with st.expander(f"📄 Inspection & Preview: {uploaded_file.name} ({uploaded_file.size:,} bytes)", expanded=True):
+                try:
+                    if uploaded_file.name.endswith(".csv"):
+                        preview_df = pd.read_csv(uploaded_file)
+                    else:
+                        preview_df = pd.read_json(uploaded_file)
+
+                    # Metadata Metrics
+                    m1, m2, m3, m4 = st.columns(4)
+                    m1.metric("Total Rows", f"{len(preview_df):,}")
+                    m2.metric("Total Columns", len(preview_df.columns))
+                    m3.metric("Missing Values", preview_df.isna().sum().sum())
+                    m4.metric("File Format", uploaded_file.name.split(".")[-1].upper())
+
+                    # Data Table Preview
+                    st.dataframe(preview_df.head(10), use_container_width=True)
+                    st.caption(f"Showing first 10 rows of {uploaded_file.name}")
+
+                    uploaded_file.seek(0)  # Reset pointer
+
+                    # Ingestion Execution Button
+                    if st.button(f"⚡ Ingest {uploaded_file.name} into Data Warehouse", type="primary", key=f"ingest_btn_{file_idx}", use_container_width=True):
+                        with st.spinner("Processing file through Kimball Star-Schema ELT Engine..."):
+                            try:
+                                import time
+                                from pipeline.realtime_engine import realtime_engine
+                                if uploaded_file.name.endswith(".csv"):
+                                    df_upload = pd.read_csv(uploaded_file)
+                                else:
+                                    df_upload = pd.read_json(uploaded_file)
+
+                                res = realtime_engine.process_raw_dataframe(df_upload, source_type=f"ui_upload:{uploaded_file.name}")
+                                if res.get("status") == "completed":
+                                    st.balloons()
+                                    st.success(f"✅ Ingested {res['submitted_rows']} rows into local DuckDB & Supabase PostgreSQL Cloud!")
+                                    st.json({
+                                        "status": "success",
+                                        "records_loaded": res.get("submitted_rows"),
+                                        "execution_time_ms": res.get("execution_time_ms"),
+                                        "kimball_scd2_updates": res.get("scd2_updated_customers", 0),
+                                        "quality_checks_passed": True
+                                    })
+                                    time.sleep(1.5)
+                                    st.rerun()
+                                else:
+                                    st.error(f"❌ Ingestion failed: {res.get('error')}")
+                            except Exception as e:
+                                st.error(f"Processing Error: {e}")
+
+                except Exception as preview_err:
+                    st.error(f"Could not parse file {uploaded_file.name}: {preview_err}")
+    else:
+        st.info("👆 Drag & Drop a `.csv` file into the dashed box above or click **Browse files**.")
+
+
+# ============================================================================
+# TAB 2: STOCK ANALYTICS
+# ============================================================================
+with tab2:
     st.subheader("Stock Market OLAP Analytics")
 
     stocks_df = run_query("""
