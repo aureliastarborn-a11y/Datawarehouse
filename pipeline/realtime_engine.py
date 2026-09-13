@@ -58,6 +58,23 @@ class RealTimeELTEngine:
             cust_df = pd.DataFrame()
             prod_df = pd.DataFrame()
             order_df = pd.DataFrame()
+            weather_df = pd.DataFrame()
+            stock_df = pd.DataFrame()
+            news_df = pd.DataFrame()
+
+            cols_set = set(df.columns)
+
+            # Weather Domain Check
+            if "city" in cols_set and any(k in cols_set for k in ["temp_celsius", "temperature", "temp", "humidity", "humidity_pct", "weather_main"]):
+                weather_df = df.copy()
+
+            # Stock Domain Check
+            if any(k in cols_set for k in ["ticker", "symbol"]) and any(k in cols_set for k in ["close_price", "close", "open_price", "open", "trade_date"]):
+                stock_df = df.copy()
+
+            # News Domain Check
+            if any(k in cols_set for k in ["title", "headline", "article"]) and any(k in cols_set for k in ["topic", "source", "source_name", "category"]):
+                news_df = df.copy()
 
             # Customer columns check
             if "customer_id" in df.columns or "raw_customer_id" in df.columns:
@@ -84,6 +101,12 @@ class RealTimeELTEngine:
                 order_df = df[order_cols].copy()
 
             # 2. Ingest into Staging
+            if not weather_df.empty:
+                summary["ingested"]["weather"] = self._stage_weather(weather_df, run_id)
+            if not stock_df.empty:
+                summary["ingested"]["stocks"] = self._stage_stocks(stock_df, run_id)
+            if not news_df.empty:
+                summary["ingested"]["news"] = self._stage_news(news_df, run_id)
             if not cust_df.empty:
                 summary["ingested"]["customers"] = self._stage_customers(cust_df)
             if not prod_df.empty:
@@ -92,8 +115,19 @@ class RealTimeELTEngine:
                 summary["ingested"]["orders"] = self._stage_orders(order_df, run_id, summary)
 
             # 3. Execute Dimensional Transformations & Fact Load
-            transformed_counts = self._execute_realtime_elt(run_id)
-            summary["transformed"] = transformed_counts
+            transformed_counts = {}
+            if not weather_df.empty:
+                from pipeline.transformers import transform_weather_data
+                summary["transformed"]["weather_facts"] = transform_weather_data(run_id)
+            if not stock_df.empty:
+                from pipeline.transformers import transform_stock_data
+                summary["transformed"]["stock_facts"] = transform_stock_data(run_id)
+            if not news_df.empty:
+                from pipeline.transformers import transform_news_data
+                summary["transformed"]["news_facts"] = transform_news_data(run_id)
+            if not order_df.empty or not cust_df.empty:
+                transformed_counts = self._execute_realtime_elt(run_id)
+                summary["transformed"].update(transformed_counts)
 
             # 4. Trigger Real-Time ML Predictive Inference
             try:
@@ -117,8 +151,8 @@ class RealTimeELTEngine:
                 run_id=run_id,
                 status="completed",
                 records_extracted=len(df),
-                records_loaded=summary["ingested"]["orders"] + summary["ingested"]["customers"] + summary["ingested"]["products"],
-                records_transformed=transformed_counts.get("facts_loaded", 0),
+                records_loaded=sum(summary["ingested"].values()),
+                records_transformed=sum([v for v in summary["transformed"].values() if isinstance(v, int)]),
                 records_rejected=summary["rejected_rows"],
             )
 
@@ -129,6 +163,85 @@ class RealTimeELTEngine:
             update_pipeline_run(run_id=run_id, status="failed", error_message=str(e))
 
         return summary
+
+    def _stage_weather(self, df: pd.DataFrame, run_id: str) -> int:
+        """Stage raw weather observation records into raw_weather_observations."""
+        count = 0
+        for _, row in df.iterrows():
+            city = str(row.get("city", row.get("location", "Unknown"))).strip()
+            if not city or city.lower() in ("none", "nan", "null"):
+                continue
+
+            dt_val = row.get("observation_dt", row.get("date", row.get("full_date", datetime.now().isoformat())))
+            if pd.isna(dt_val) or not dt_val:
+                dt_val = datetime.now().isoformat()
+            else:
+                dt_val = str(dt_val)
+
+            temp = float(row.get("temp_celsius", row.get("temperature", row.get("temp", row.get("avg_temp", 25.0)))))
+            feels = float(row.get("feels_like_c", row.get("feels_like", temp)))
+            temp_min = float(row.get("temp_min_c", row.get("temp_min", temp - 2.0)))
+            temp_max = float(row.get("temp_max_c", row.get("temp_max", temp + 2.0)))
+            pressure = int(row.get("pressure_hpa", row.get("pressure", 1013)))
+            humidity = int(row.get("humidity_pct", row.get("humidity", 65)))
+            wind_speed = float(row.get("wind_speed_ms", row.get("wind_speed", row.get("wind", 5.0))))
+            country = str(row.get("country_code", row.get("country", "IND"))).strip()
+
+            execute_sql("""
+                INSERT INTO raw_weather_observations
+                    (city, country_code, observation_dt, temp_celsius, feels_like_c, temp_min_c, temp_max_c, pressure_hpa, humidity_pct, wind_speed_ms, source, pipeline_run_id)
+                VALUES (%s, %s, CAST(%s AS TIMESTAMP), %s, %s, %s, %s, %s, %s, %s, 'ui_upload', CAST(%s AS UUID))
+            """, (city, country, dt_val, temp, feels, temp_min, temp_max, pressure, humidity, wind_speed, run_id))
+            count += 1
+        return count
+
+    def _stage_stocks(self, df: pd.DataFrame, run_id: str) -> int:
+        """Stage raw stock price records into raw_stock_prices."""
+        count = 0
+        for _, row in df.iterrows():
+            ticker = str(row.get("ticker", row.get("symbol", ""))).strip().upper()
+            if not ticker or ticker.lower() in ("none", "nan", "null"):
+                continue
+
+            dt_val = row.get("trade_date", row.get("date", row.get("full_date", datetime.now().strftime("%Y-%m-%d"))))
+            if pd.isna(dt_val) or not dt_val:
+                dt_val = datetime.now().strftime("%Y-%m-%d")
+            else:
+                dt_val = str(dt_val)[:10]
+
+            open_p = float(row.get("open_price", row.get("open", 100.0)))
+            high_p = float(row.get("high_price", row.get("high", open_p * 1.02)))
+            low_p = float(row.get("low_price", row.get("low", open_p * 0.98)))
+            close_p = float(row.get("close_price", row.get("close", open_p * 1.01)))
+            volume = int(row.get("volume", 1000000))
+
+            execute_sql("""
+                INSERT INTO raw_stock_prices
+                    (ticker, trade_date, open_price, high_price, low_price, close_price, volume, source, pipeline_run_id)
+                VALUES (%s, CAST(%s AS DATE), %s, %s, %s, %s, %s, 'ui_upload', CAST(%s AS UUID))
+            """, (ticker, dt_val, open_p, high_p, low_p, close_p, volume, run_id))
+            count += 1
+        return count
+
+    def _stage_news(self, df: pd.DataFrame, run_id: str) -> int:
+        """Stage raw news articles into raw_news_articles."""
+        count = 0
+        for _, row in df.iterrows():
+            title = str(row.get("title", row.get("headline", ""))).strip()
+            if not title or title.lower() in ("none", "nan", "null"):
+                continue
+
+            dt_val = row.get("published_at", row.get("date", datetime.now().isoformat()))
+            topic = str(row.get("topic", row.get("category", "general"))).strip().lower()
+            source_name = str(row.get("source_name", row.get("source", "General News"))).strip()
+
+            execute_sql("""
+                INSERT INTO raw_news_articles
+                    (title, topic, source_name, published_at, pipeline_run_id)
+                VALUES (%s, %s, %s, CAST(%s AS TIMESTAMP), CAST(%s AS UUID))
+            """, (title, topic, source_name, dt_val, run_id))
+            count += 1
+        return count
 
     def _stage_customers(self, df: pd.DataFrame) -> int:
         """Stage raw customer records into stg_customers."""

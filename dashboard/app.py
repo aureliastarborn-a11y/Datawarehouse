@@ -651,16 +651,43 @@ with tab2:
 
 
 # ============================================================================
-# TAB 2: WEATHER ANALYTICS
+# TAB 3: WEATHER ANALYTICS
 # ============================================================================
-with tab2:
-    st.subheader("Weather OLAP Analytics")
+with tab3:
+    st.subheader("🌤️ Weather OLAP Analytics")
 
     weather_df = run_query("""
         SELECT * FROM olap_weather_daily_summary
         ORDER BY full_date DESC, city
         LIMIT 500
     """)
+
+    if weather_df.empty:
+        weather_df = run_query("""
+            SELECT
+                CAST(d.full_date AS VARCHAR) AS full_date,
+                d.day_name,
+                d.month_name,
+                d.year,
+                l.city,
+                l.country_code,
+                COUNT(*) AS observation_count,
+                ROUND(AVG(f.temp_celsius), 2) AS avg_temp_c,
+                ROUND(MIN(f.temp_min_c), 2) AS daily_min_temp_c,
+                ROUND(MAX(f.temp_max_c), 2) AS daily_max_temp_c,
+                ROUND(AVG(f.humidity_pct), 1) AS avg_humidity_pct,
+                ROUND(AVG(f.wind_speed_ms), 2) AS avg_wind_speed_ms,
+                ROUND(AVG(f.pressure_hpa), 0) AS avg_pressure_hpa,
+                ROUND(SUM(f.rain_1h_mm), 2) AS total_rain_mm,
+                ROUND(SUM(f.snow_1h_mm), 2) AS total_snow_mm,
+                'Clear' AS dominant_weather
+            FROM fact_weather_readings f
+            JOIN dim_date d ON f.date_key = d.date_key
+            JOIN dim_location l ON f.location_key = l.location_key
+            GROUP BY d.full_date, d.day_name, d.month_name, d.year, l.city, l.country_code
+            ORDER BY full_date DESC, l.city
+            LIMIT 500
+        """)
 
     if not weather_df.empty:
         cities = weather_df["city"].unique().tolist()
@@ -701,14 +728,14 @@ with tab2:
             st.dataframe(w_filtered, use_container_width=True)
             add_csv_download(w_filtered, "Weather Analytics")
     else:
-        st.info("No weather data available. Run the weather pipeline to extract data.")
+        st.info("No weather data available. Ingest a weather CSV above to view live visualizations.")
 
 
 # ============================================================================
-# TAB 3: NEWS ANALYTICS
+# TAB 4: NEWS ANALYTICS
 # ============================================================================
-with tab3:
-    st.subheader("News OLAP Analytics")
+with tab4:
+    st.subheader("📰 News OLAP Analytics")
 
     news_df = run_query("""
         SELECT * FROM olap_news_daily_summary
@@ -756,10 +783,10 @@ with tab3:
 
 
 # ============================================================================
-# TAB 4: CROSS-DOMAIN CORRELATION
+# TAB 5: CROSS-DOMAIN CORRELATION
 # ============================================================================
-with tab4:
-    st.subheader("Cross-Domain Correlation Analytics")
+with tab5:
+    st.subheader("🔗 Cross-Domain Correlation Analytics")
 
     cross_df = run_query("""
         SELECT * FROM olap_cross_domain_daily
@@ -808,10 +835,10 @@ with tab4:
 
 
 # ============================================================================
-# TAB 5: PIPELINE AUDIT TRAIL
+# TAB 6: PIPELINE AUDIT TRAIL
 # ============================================================================
-with tab5:
-    st.subheader("Pipeline Execution Audit Trail")
+with tab6:
+    st.subheader("⚙️ Pipeline Execution Audit Trail")
 
     pipeline_df = run_query("""
         SELECT
@@ -854,9 +881,9 @@ with tab5:
 
 
 # ============================================================================
-# TAB 6: MACHINE LEARNING PREDICTIVE INSIGHTS
+# TAB 7: MACHINE LEARNING PREDICTIVE INSIGHTS
 # ============================================================================
-with tab6:
+with tab7:
     st.subheader("🤖 Machine Learning Predictive Insights & Anomaly Detection")
     st.caption("Forecasting stock trends with confidence intervals & statistical weather anomaly detection.")
 
