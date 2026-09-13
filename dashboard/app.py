@@ -210,10 +210,56 @@ st.markdown("""
     .status-running { background: #FFF3CD; color: #856404; }
     .status-failed { background: #F8D7DA; color: #721C24; }
 
-    /* File Uploader — keep Streamlit defaults clean, no internal overrides */
+    /* File Uploader Dropzone & Button Styling (Fix Text Overlap) */
     div[data-testid="stFileUploader"] {
         background-color: #FFFFFF !important;
-        border-radius: 6px !important;
+        border: 2px dashed #8B0029 !important;
+        border-radius: 8px !important;
+        padding: 16px 20px !important;
+    }
+
+    div[data-testid="stFileUploader"] section {
+        background-color: #FDF8F9 !important;
+        border: none !important;
+        padding: 16px !important;
+    }
+
+    div[data-testid="stFileUploader"] button {
+        background-color: #8B0029 !important;
+        color: #FFFFFF !important;
+        border: none !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
+        padding: 8px 20px !important;
+        height: auto !important;
+        min-height: 38px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        white-space: nowrap !important;
+        position: relative !important;
+        box-shadow: none !important;
+    }
+
+    div[data-testid="stFileUploader"] button * {
+        position: relative !important;
+        display: inline-block !important;
+        opacity: 1 !important;
+        color: #FFFFFF !important;
+        white-space: nowrap !important;
+    }
+
+    div[data-testid="stFileUploader"] button:hover {
+        background-color: #6B001F !important;
+    }
+
+    div[data-testid="stFileUploader"] small,
+    div[data-testid="stFileUploader"] p,
+    div[data-testid="stFileUploader"] span {
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        color: #5A626A !important;
     }
 
     /* Responsive Mobile & Desktop Layout Optimizations */
