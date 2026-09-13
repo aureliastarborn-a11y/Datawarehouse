@@ -57,9 +57,13 @@ st.markdown("""
         font-weight: 700 !important;
     }
 
-    p, span, label {
+    p, label, span:not([data-testid*="stIcon"]):not([class*="material"]) {
         font-family: 'Plus Jakarta Sans', sans-serif !important;
         color: #2B2D42;
+    }
+
+    span[data-testid*="stIcon"], [class*="material-symbols"], [class*="material-icons"] {
+        font-family: 'Material Symbols Rounded', 'Material Icons' !important;
     }
 
     .editorial-badge {
@@ -243,12 +247,18 @@ st.markdown("""
         box-shadow: none !important;
     }
 
-    div[data-testid="stFileUploader"] button * {
-        position: relative !important;
-        display: inline-block !important;
-        opacity: 1 !important;
+    div[data-testid="stFileUploader"] button span[data-testid*="stIcon"] {
+        font-family: 'Material Symbols Rounded', 'Material Icons' !important;
+        font-size: 18px !important;
         color: #FFFFFF !important;
-        white-space: nowrap !important;
+        margin-right: 4px !important;
+    }
+
+    div[data-testid="stFileUploader"] button span:not([data-testid*="stIcon"]) {
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        color: #FFFFFF !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
     }
 
     div[data-testid="stFileUploader"] button:hover {
@@ -256,8 +266,7 @@ st.markdown("""
     }
 
     div[data-testid="stFileUploader"] small,
-    div[data-testid="stFileUploader"] p,
-    div[data-testid="stFileUploader"] span {
+    div[data-testid="stFileUploader"] p {
         font-family: 'Plus Jakarta Sans', sans-serif !important;
         color: #5A626A !important;
     }
