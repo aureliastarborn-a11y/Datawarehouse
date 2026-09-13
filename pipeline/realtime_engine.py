@@ -253,25 +253,61 @@ class RealTimeELTEngine:
         4. Fact Sales Insertion
         """
         # 1. Date Dimension Check
-        execute_sql("""
-            INSERT INTO dim_date (
-                date_key, full_date, day_name, day_of_week, day_of_month,
-                month, month_name, quarter, year, is_weekend
-            )
-            SELECT
-                CAST(STRFTIME(d, '%Y%m%d') AS INTEGER) AS date_key,
-                CAST(d AS DATE) AS full_date,
-                STRFTIME(d, '%A') AS day_name,
-                EXTRACT(DOW FROM d) + 1 AS day_of_week,
-                EXTRACT(DAY FROM d) AS day_of_month,
-                EXTRACT(MONTH FROM d) AS month,
-                STRFTIME(d, '%B') AS month_name,
-                EXTRACT(QUARTER FROM d) AS quarter,
-                EXTRACT(YEAR FROM d) AS year,
-                CASE WHEN EXTRACT(DOW FROM d) IN (0, 6) THEN TRUE ELSE FALSE END AS is_weekend
-            FROM GENERATE_SERIES(DATE '2024-01-01', DATE '2026-12-31', INTERVAL '1 day') AS s(d)
-            ON CONFLICT (date_key) DO NOTHING;
-        """)
+        mode = get_mode()
+        if mode == "supabase":
+            execute_sql("""
+                INSERT INTO dim_date (
+                    date_key, full_date, day_name, day_of_week, day_of_month,
+                    day_of_year, week_of_year, month, month_name, quarter, year,
+                    is_weekend, is_month_start, is_month_end, fiscal_quarter, fiscal_year
+                )
+                SELECT
+                    CAST(TO_CHAR(d, 'YYYYMMDD') AS INTEGER) AS date_key,
+                    CAST(d AS DATE) AS full_date,
+                    TRIM(TO_CHAR(d, 'Day')) AS day_name,
+                    EXTRACT(DOW FROM d) + 1 AS day_of_week,
+                    EXTRACT(DAY FROM d) AS day_of_month,
+                    EXTRACT(DOY FROM d) AS day_of_year,
+                    EXTRACT(WEEK FROM d) AS week_of_year,
+                    EXTRACT(MONTH FROM d) AS month,
+                    TRIM(TO_CHAR(d, 'Month')) AS month_name,
+                    EXTRACT(QUARTER FROM d) AS quarter,
+                    EXTRACT(YEAR FROM d) AS year,
+                    CASE WHEN EXTRACT(DOW FROM d) IN (0, 6) THEN TRUE ELSE FALSE END AS is_weekend,
+                    CASE WHEN EXTRACT(DAY FROM d) = 1 THEN TRUE ELSE FALSE END AS is_month_start,
+                    CASE WHEN (d + INTERVAL '1 day')::DATE = DATE_TRUNC('month', d + INTERVAL '1 month')::DATE THEN TRUE ELSE FALSE END AS is_month_end,
+                    EXTRACT(QUARTER FROM d) AS fiscal_quarter,
+                    EXTRACT(YEAR FROM d) AS fiscal_year
+                FROM GENERATE_SERIES(DATE '2024-01-01', DATE '2026-12-31', INTERVAL '1 day') AS d
+                ON CONFLICT (date_key) DO NOTHING;
+            """)
+        else:
+            execute_sql("""
+                INSERT INTO dim_date (
+                    date_key, full_date, day_name, day_of_week, day_of_month,
+                    day_of_year, week_of_year, month, month_name, quarter, year,
+                    is_weekend, is_month_start, is_month_end, fiscal_quarter, fiscal_year
+                )
+                SELECT
+                    CAST(STRFTIME(d, '%Y%m%d') AS INTEGER) AS date_key,
+                    CAST(d AS DATE) AS full_date,
+                    STRFTIME(d, '%A') AS day_name,
+                    EXTRACT(DOW FROM d) + 1 AS day_of_week,
+                    EXTRACT(DAY FROM d) AS day_of_month,
+                    EXTRACT(DOY FROM d) AS day_of_year,
+                    EXTRACT(WEEK FROM d) AS week_of_year,
+                    EXTRACT(MONTH FROM d) AS month,
+                    STRFTIME(d, '%B') AS month_name,
+                    EXTRACT(QUARTER FROM d) AS quarter,
+                    EXTRACT(YEAR FROM d) AS year,
+                    CASE WHEN EXTRACT(DOW FROM d) IN (0, 6) THEN TRUE ELSE FALSE END AS is_weekend,
+                    CASE WHEN EXTRACT(DAY FROM d) = 1 THEN TRUE ELSE FALSE END AS is_month_start,
+                    CASE WHEN d = LAST_DAY(d) THEN TRUE ELSE FALSE END AS is_month_end,
+                    EXTRACT(QUARTER FROM d) AS fiscal_quarter,
+                    EXTRACT(YEAR FROM d) AS fiscal_year
+                FROM GENERATE_SERIES(DATE '2024-01-01', DATE '2026-12-31', INTERVAL '1 day') AS s(d)
+                ON CONFLICT (date_key) DO NOTHING;
+            """)
 
         # 2. Product Dimension (SCD Type 1)
         execute_sql("""
@@ -365,7 +401,8 @@ class RealTimeELTEngine:
         """)
 
         # 4. Insert Fact Sales with SCD2 Point-in-Time lookup
-        execute_sql("""
+        order_date_key_sql = "CAST(TO_CHAR(o.order_timestamp, 'YYYYMMDD') AS INTEGER)" if mode == "supabase" else "CAST(STRFTIME(o.order_timestamp, '%Y%m%d') AS INTEGER)"
+        execute_sql(f"""
             INSERT INTO fact_sales (
                 sales_fact_key, order_id, order_line_number, customer_key, product_key,
                 order_date_key, quantity, unit_price, gross_amount, discount_amount,
@@ -395,7 +432,7 @@ class RealTimeELTEngine:
                 o.order_line_number,
                 cm.customer_key,
                 p.product_key,
-                CAST(STRFTIME(o.order_timestamp, '%Y%m%d') AS INTEGER) AS order_date_key,
+                {order_date_key_sql} AS order_date_key,
                 o.quantity,
                 o.unit_price,
                 (o.quantity * o.unit_price) AS gross_amount,

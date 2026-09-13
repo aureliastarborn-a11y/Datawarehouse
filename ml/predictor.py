@@ -346,14 +346,14 @@ def forecast_sales_revenue(forecast_months: int = 3) -> Dict[str, Any]:
         SELECT
             d.year,
             d.month,
-            STRFTIME(d.full_date, '%Y-%m') AS year_month,
+            d.year || '-' || LPAD(CAST(d.month AS VARCHAR), 2, '0') AS year_month,
             SUM(f.net_amount) AS total_net_revenue,
             SUM(f.profit_amount) AS total_profit,
             SUM(f.quantity) AS total_units_sold,
             COUNT(DISTINCT f.order_id) AS total_orders
         FROM fact_sales f
         JOIN dim_date d ON f.order_date_key = d.date_key
-        GROUP BY d.year, d.month, STRFTIME(d.full_date, '%Y-%m')
+        GROUP BY d.year, d.month
         ORDER BY year_month ASC
     """
     df = execute_sql_df(sql)
