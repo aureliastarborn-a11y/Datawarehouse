@@ -45,9 +45,17 @@ def sync_duckdb_to_supabase() -> Dict[str, Any]:
     timestamp = datetime.now().isoformat()
     cloud_active = is_cloud_sync_configured()
 
+    # Order matters: delete facts first (they reference dims), then dims
     tables_to_sync = [
+        # Facts first (depend on dims via FK)
+        "fact_sales", "fact_stock_prices", "fact_weather_readings", "fact_news_articles",
+        # Staging tables
         "stg_customers", "stg_products", "stg_orders",
-        "dim_date", "dim_customer", "dim_product", "fact_sales",
+        # Dimension tables
+        "dim_date", "dim_customer", "dim_product", "dim_company", "dim_location", "dim_news_source",
+        # Raw/staging observation tables
+        "raw_stock_prices", "raw_weather_observations", "raw_news_articles",
+        # Audit tables (NOTE: olap_* are VIEWs - auto-computed, not synced)
         "pipeline_runs", "data_quality_log"
     ]
 
@@ -78,7 +86,7 @@ def sync_duckdb_to_supabase() -> Dict[str, Any]:
                             continue
 
                         # Delete & Bulk insert for clean dimensional synchronization
-                        cur.execute(f"TRUNCATE TABLE {table} CASCADE;")
+                        cur.execute(f"DELETE FROM {table};")
                         
                         import psycopg2.extras
 

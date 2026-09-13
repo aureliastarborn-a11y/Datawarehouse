@@ -715,7 +715,9 @@ with tab3:
 
         # Weather conditions pie
         if "dominant_weather" in w_filtered.columns:
-            weather_counts = w_filtered["dominant_weather"].value_counts().reset_index()
+            w_counts_df = w_filtered.copy()
+            w_counts_df["dominant_weather"] = w_counts_df["dominant_weather"].fillna("Clear / Moderate")
+            weather_counts = w_counts_df["dominant_weather"].value_counts().reset_index()
             weather_counts.columns = ["weather", "count"]
             fig_pie = px.pie(
                 weather_counts, values="count", names="weather",
@@ -878,6 +880,183 @@ with tab6:
             st.info("No data quality checks logged yet.")
     else:
         st.info("No pipeline runs recorded yet. Trigger a pipeline from the sidebar.")
+
+    # ========================================================================
+    # DATA MANAGEMENT — DELETE UPLOADED DATA
+    # ========================================================================
+    st.markdown("---")
+    st.subheader("🗑️ Data Management — Delete Uploaded Data")
+    st.caption("Review current data volumes per domain and selectively delete records from the warehouse.")
+
+    # Current data counts per domain
+    domain_counts = run_query("""
+        SELECT
+            (SELECT COUNT(*) FROM raw_weather_observations) AS raw_weather,
+            (SELECT COUNT(*) FROM fact_weather_readings) AS fact_weather,
+            (SELECT COUNT(*) FROM raw_stock_prices) AS raw_stocks,
+            (SELECT COUNT(*) FROM fact_stock_prices) AS fact_stocks,
+            (SELECT COUNT(*) FROM raw_news_articles) AS raw_news,
+            (SELECT COUNT(*) FROM fact_news_articles) AS fact_news,
+            (SELECT COUNT(*) FROM stg_customers) AS stg_customers,
+            (SELECT COUNT(*) FROM stg_products) AS stg_products,
+            (SELECT COUNT(*) FROM stg_orders) AS stg_orders,
+            (SELECT COUNT(*) FROM fact_sales) AS fact_sales
+    """)
+
+    if not domain_counts.empty:
+        dc = domain_counts.iloc[0]
+
+        dm_col1, dm_col2, dm_col3, dm_col4 = st.columns(4)
+        with dm_col1:
+            st.markdown("##### 🌤️ Weather")
+            st.metric("Raw Observations", int(dc.get("raw_weather", 0)))
+            st.metric("Fact Records", int(dc.get("fact_weather", 0)))
+        with dm_col2:
+            st.markdown("##### 📈 Stocks")
+            st.metric("Raw Prices", int(dc.get("raw_stocks", 0)))
+            st.metric("Fact Records", int(dc.get("fact_stocks", 0)))
+        with dm_col3:
+            st.markdown("##### 📰 News")
+            st.metric("Raw Articles", int(dc.get("raw_news", 0)))
+            st.metric("Fact Records", int(dc.get("fact_news", 0)))
+        with dm_col4:
+            st.markdown("##### 🛒 Sales / Orders")
+            st.metric("Staged Orders", int(dc.get("stg_orders", 0)))
+            st.metric("Fact Sales", int(dc.get("fact_sales", 0)))
+
+    st.markdown("---")
+
+    # Delete controls
+    def _execute_delete(statements, domain_label):
+        """Execute a list of SQL DELETE statements and report results."""
+        try:
+            from config.supabase_client import get_mode, get_pg_connection, get_duckdb_connection
+            mode = get_mode()
+            if mode == "supabase":
+                conn = get_pg_connection()
+                if conn is None:
+                    st.error("Cannot connect to database.")
+                    return
+                try:
+                    with conn.cursor() as cur:
+                        total_deleted = 0
+                        for sql in statements:
+                            cur.execute(sql)
+                            total_deleted += cur.rowcount
+                    conn.commit()
+                    st.success(f"✅ Deleted {total_deleted:,} {domain_label} records from Supabase PostgreSQL.")
+                except Exception as e:
+                    conn.rollback()
+                    st.error(f"Delete failed: {e}")
+                finally:
+                    conn.close()
+            else:
+                conn = get_duckdb_connection()
+                try:
+                    total_deleted = 0
+                    for sql in statements:
+                        result = conn.execute(sql)
+                        total_deleted += result.fetchone()[0] if result else 0
+                    st.success(f"✅ Deleted {total_deleted:,} {domain_label} records from local DuckDB.")
+                except Exception as e:
+                    st.error(f"Delete failed: {e}")
+
+            import time
+            time.sleep(1)
+            st.rerun()
+        except Exception as e:
+            st.error(f"Database error: {e}")
+
+    del_col1, del_col2, del_col3, del_col4 = st.columns(4)
+
+    with del_col1:
+        if st.button("🗑️ Delete Weather Data", type="secondary", use_container_width=True, key="del_weather"):
+            st.session_state["confirm_delete_weather"] = True
+        if st.session_state.get("confirm_delete_weather"):
+            st.warning("⚠️ This will permanently delete **all weather** raw observations and fact records.")
+            confirm = st.checkbox("I confirm deletion of all weather data", key="confirm_weather_cb")
+            if confirm:
+                if st.button("🔴 Confirm Delete Weather", type="primary", use_container_width=True, key="do_del_weather"):
+                    _execute_delete([
+                        "DELETE FROM fact_weather_readings",
+                        "DELETE FROM raw_weather_observations",
+                    ], "Weather")
+
+    with del_col2:
+        if st.button("🗑️ Delete Stock Data", type="secondary", use_container_width=True, key="del_stocks"):
+            st.session_state["confirm_delete_stocks"] = True
+        if st.session_state.get("confirm_delete_stocks"):
+            st.warning("⚠️ This will permanently delete **all stock** raw prices and fact records.")
+            confirm = st.checkbox("I confirm deletion of all stock data", key="confirm_stocks_cb")
+            if confirm:
+                if st.button("🔴 Confirm Delete Stocks", type="primary", use_container_width=True, key="do_del_stocks"):
+                    _execute_delete([
+                        "DELETE FROM fact_stock_prices",
+                        "DELETE FROM raw_stock_prices",
+                        "DELETE FROM dim_company",
+                    ], "Stock")
+
+    with del_col3:
+        if st.button("🗑️ Delete News Data", type="secondary", use_container_width=True, key="del_news"):
+            st.session_state["confirm_delete_news"] = True
+        if st.session_state.get("confirm_delete_news"):
+            st.warning("⚠️ This will permanently delete **all news** articles and fact records.")
+            confirm = st.checkbox("I confirm deletion of all news data", key="confirm_news_cb")
+            if confirm:
+                if st.button("🔴 Confirm Delete News", type="primary", use_container_width=True, key="do_del_news"):
+                    _execute_delete([
+                        "DELETE FROM fact_news_articles",
+                        "DELETE FROM raw_news_articles",
+                        "DELETE FROM dim_news_source",
+                    ], "News")
+
+    with del_col4:
+        if st.button("🗑️ Delete Sales Data", type="secondary", use_container_width=True, key="del_sales"):
+            st.session_state["confirm_delete_sales"] = True
+        if st.session_state.get("confirm_delete_sales"):
+            st.warning("⚠️ This will permanently delete **all sales** orders, customers, and products.")
+            confirm = st.checkbox("I confirm deletion of all sales data", key="confirm_sales_cb")
+            if confirm:
+                if st.button("🔴 Confirm Delete Sales", type="primary", use_container_width=True, key="do_del_sales"):
+                    _execute_delete([
+                        "DELETE FROM fact_sales",
+                        "DELETE FROM stg_orders",
+                        "DELETE FROM stg_products",
+                        "DELETE FROM stg_customers",
+                        "DELETE FROM dim_product",
+                        "DELETE FROM dim_customer",
+                    ], "Sales")
+
+    st.markdown("---")
+
+    # Full warehouse reset
+    st.markdown("##### ⚠️ Full Warehouse Reset")
+    if st.button("💣 Delete ALL Data (Full Reset)", type="secondary", use_container_width=True, key="del_all"):
+        st.session_state["confirm_delete_all"] = True
+    if st.session_state.get("confirm_delete_all"):
+        st.error("🚨 **DANGER ZONE** — This will permanently erase ALL data from every table in the warehouse. This action cannot be undone.")
+        confirm_all = st.checkbox("I understand this will delete everything and cannot be undone", key="confirm_all_cb")
+        if confirm_all:
+            if st.button("🔴🔴 CONFIRM FULL WAREHOUSE RESET", type="primary", use_container_width=True, key="do_del_all"):
+                _execute_delete([
+                    "DELETE FROM fact_sales",
+                    "DELETE FROM fact_stock_prices",
+                    "DELETE FROM fact_weather_readings",
+                    "DELETE FROM fact_news_articles",
+                    "DELETE FROM stg_orders",
+                    "DELETE FROM stg_products",
+                    "DELETE FROM stg_customers",
+                    "DELETE FROM raw_stock_prices",
+                    "DELETE FROM raw_weather_observations",
+                    "DELETE FROM raw_news_articles",
+                    "DELETE FROM dim_product",
+                    "DELETE FROM dim_customer",
+                    "DELETE FROM dim_company",
+                    "DELETE FROM dim_location",
+                    "DELETE FROM dim_news_source",
+                    "DELETE FROM data_quality_log",
+                    "DELETE FROM pipeline_runs",
+                ], "ALL warehouse")
 
 
 # ============================================================================

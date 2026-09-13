@@ -137,9 +137,14 @@ class RealTimeELTEngine:
                 summary["ml_insights"] = {"status": "error", "error": str(ml_err)}
 
             # 5. Trigger Supabase Cloud Replication & Sync
+            # SKIP when mode is "supabase" — transformers already write directly to PostgreSQL.
+            # Running sync in supabase mode would TRUNCATE CASCADE dim tables and destroy fact data.
             try:
-                from pipeline.cloud_sync import sync_duckdb_to_supabase
-                summary["cloud_sync"] = sync_duckdb_to_supabase()
+                if self.mode == "local":
+                    from pipeline.cloud_sync import sync_duckdb_to_supabase
+                    summary["cloud_sync"] = sync_duckdb_to_supabase()
+                else:
+                    summary["cloud_sync"] = {"status": "skipped", "reason": "supabase_direct_mode"}
             except Exception as sync_err:
                 summary["cloud_sync"] = {"status": "error", "error": str(sync_err)}
 
